@@ -22,7 +22,7 @@ const SignUpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordValue, setPasswordValue] = useState("");
 
-  // লাইভ ভ্যালিডেশন চেকলিস্ট (ইমেজের অবিকল ডিজাইন)
+  
   const validationChecks = {
     length: passwordValue.length >= 6,
     lowercase: /[a-z]/.test(passwordValue),
@@ -33,7 +33,7 @@ const SignUpPage = () => {
     e.preventDefault();
     setServerError("");
 
-    // সাবমিট করার আগে পাসওয়ার্ডের সব কন্ডিশন ক্লায়েন্ট সাইডে চেক করা
+    
     if (!validationChecks.length || !validationChecks.lowercase || !validationChecks.uppercase) {
       setServerError("Please satisfy all password criteria before registering.");
       return;
@@ -52,7 +52,7 @@ const SignUpPage = () => {
       });
 
       if (data) {
-        // অ্যাসাইনমেন্ট রিকোয়ারমেন্ট: সফল হলে লগইন পেইজে রিডাইরেক্ট করবে
+
         router.push("/login");
       }
 
@@ -75,19 +75,19 @@ const SignUpPage = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-slate-50 dark:bg-emerald-950/20 px-4 py-8 transition-colors duration-300">
       
-      {/* মেইন ২-কলাম স্প্লিট কন্টেইনার */}
+     
       <div className="flex w-full max-w-4xl bg-white dark:bg-[#022c22] rounded-2xl shadow-xl overflow-hidden border border-slate-100 dark:border-emerald-900 transition-colors duration-300">
         
-        {/* বাম পাশ: ইনফরমেশন ব্যানার প্যানেল (ইমেজের হুবহু ডিজাইন) */}
+     
         <div className="hidden md:flex md:w-5/12 bg-[#044e3a] p-10 flex-col justify-between text-white relative">
           <div className="space-y-8">
-            {/* লোগো */}
+           
             <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
               <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-600 text-white text-lg">🩺</span>
               <span>MediQueue</span>
             </div>
 
-            {/* টেক্সট কন্টেন্ট */}
+           
             <div className="space-y-3">
               <h2 className="text-3xl font-bold leading-tight">Start your learning journey</h2>
               <p className="text-emerald-100/80 text-sm leading-relaxed">
@@ -95,7 +95,7 @@ const SignUpPage = () => {
               </p>
             </div>
 
-            {/* ফিচার লিস্ট */}
+           
             <div className="space-y-4 pt-4">
               <div className="flex items-center gap-3 text-sm text-emerald-100/90">
                 <span className="p-1.5 rounded-lg bg-emerald-800/60 text-emerald-300">👥</span>
@@ -112,13 +112,13 @@ const SignUpPage = () => {
             </div>
           </div>
 
-          {/* কপিরাইট */}
+        
           <div className="text-xs text-emerald-200/50 mt-12">
             © 2026 MediQueue
           </div>
         </div>
 
-        {/* ডান পাশ: রেজিস্ট্রেশন ফর্ম প্যানেল */}
+       
         <div className="w-full md:w-7/12 p-8 sm:p-12 flex flex-col justify-center">
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Create account</h1>
@@ -129,7 +129,7 @@ const SignUpPage = () => {
 
           <Form onSubmit={onSubmit} className="flex flex-col gap-4 w-full">
             
-            {/* নাম ও ইমেইল (২-কলাম গ্রিড লেআউট) */}
+           
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <TextField isRequired name="name" type="text" className="flex flex-col gap-1.5">
                 <Label className="text-xs font-semibold text-slate-700 dark:text-emerald-300">Full name</Label>
@@ -159,7 +159,7 @@ const SignUpPage = () => {
               </TextField>
             </div>
 
-            {/* ফটো ইউআরএল ইনপুট */}
+            
             <TextField name="image" type="url" className="flex flex-col gap-1.5">
               <Label className="text-xs font-semibold text-slate-700 dark:text-emerald-300">Photo URL</Label>
               <Input 
@@ -171,7 +171,7 @@ const SignUpPage = () => {
               </span>
             </TextField>
 
-            {/* পাসওয়ার্ড ইনপুট ফিল্ড */}
+        
             <TextField isRequired name="password" className="flex flex-col gap-1.5">
               <Label className="text-xs font-semibold text-slate-700 dark:text-emerald-300">Password</Label>
               <div className="relative">
@@ -192,7 +192,7 @@ const SignUpPage = () => {
               </div>
             </TextField>
 
-            {/* ইমেজের মতো পাসওয়ার্ড রিয়েল-টাইম চেকলিস্ট বক্স */}
+           
             <div className="p-3 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-lg border border-emerald-100/70 dark:border-emerald-900/40 space-y-1.5">
               <div className={`flex items-center gap-2 text-xs font-medium transition-colors ${validationChecks.length ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400 dark:text-slate-500"}`}>
                 <span>{validationChecks.length ? "✓" : "✕"}</span> At least 6 characters
@@ -205,14 +205,14 @@ const SignUpPage = () => {
               </div>
             </div>
 
-            {/* সার্ভার/সাবমিশন এরর মেসেজ */}
+          
             {serverError && (
               <div className="flex items-center gap-2 text-xs font-medium text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/20 px-3 py-2 rounded-lg border border-rose-200 dark:border-rose-900">
                 <span>⚠️</span> {serverError}
               </div>
             )}
 
-            {/* সাবমিট বাটন */}
+          
             <Button 
               className="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors shadow-sm text-sm focus:outline-none flex justify-center items-center" 
               type="submit"
@@ -222,14 +222,14 @@ const SignUpPage = () => {
             </Button>
           </Form>
 
-          {/* সেপারেটর */}
+          
           <div className="relative flex py-4 items-center w-full">
             <div className="flex-grow border-t border-slate-100 dark:border-emerald-900"></div>
             <span className="flex-shrink mx-4 text-slate-400 text-xs dark:text-emerald-500/60 uppercase tracking-wider">or</span>
             <div className="flex-grow border-t border-slate-100 dark:border-emerald-900"></div>
           </div>
 
-          {/* গুগল সাইন ইন */}
+     
           <Button
             onClick={handleGoogleSignin}
             className="w-full flex items-center justify-center gap-2 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-emerald-900/30 text-slate-700 dark:text-emerald-200 border border-slate-200 dark:border-emerald-800 font-medium py-2 px-4 rounded-lg text-sm transition-all focus:outline-none shadow-sm"
@@ -237,7 +237,7 @@ const SignUpPage = () => {
             <FcGoogle size={20} /> Sign up with Google
           </Button>
 
-          {/* লগইন রিডাইরেক্ট লিঙ্ক */}
+        
           <div className="text-center mt-5">
             <p className="text-sm text-slate-500 dark:text-emerald-400/60">
               Already have an account?{" "}

@@ -58,19 +58,19 @@ const LoginPage = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-slate-50 dark:bg-emerald-950/20 px-4 py-8 transition-colors duration-300">
       
-      {/* মেইন ২-কলাম কন্টেইনার কার্ড */}
+      
       <div className="flex w-full max-w-4xl bg-white dark:bg-[#022c22] rounded-2xl shadow-xl overflow-hidden border border-slate-100 dark:border-emerald-900 transition-colors duration-300">
         
-        {/* বাম পাশ: ইনফরমেশন ব্যানার প্যানেল */}
+       
         <div className="hidden md:flex md:w-5/12 bg-[#044e3a] p-10 flex-col justify-between text-white relative">
           <div className="space-y-8">
-            {/* লোগো */}
+          
             <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
               <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-600 text-white text-lg">🩺</span>
               <span>MediQueue</span>
             </div>
 
-            {/* টেক্সট কন্টেন্ট */}
+           
             <div className="space-y-3">
               <h2 className="text-3xl font-bold leading-tight">Welcome back, learner</h2>
               <p className="text-emerald-100/80 text-sm leading-relaxed">
@@ -78,7 +78,7 @@ const LoginPage = () => {
               </p>
             </div>
 
-            {/* ফিচার লিস্ট */}
+            
             <div className="space-y-4 pt-4">
               <div className="flex items-center gap-3 text-sm text-emerald-100/90">
                 <span className="p-1.5 rounded-lg bg-emerald-800/60 text-emerald-300">📅</span>
@@ -95,13 +95,13 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* কপিরাইট */}
+         
           <div className="text-xs text-emerald-200/50 mt-12">
             © 2026 MediQueue
           </div>
         </div>
 
-        {/* ডান পাশ: ইন্টারেক্টিভ ফর্ম প্যানেল */}
+        
         <div className="w-full md:w-7/12 p-8 sm:p-12 flex flex-col justify-center">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Log in</h1>
@@ -110,10 +110,10 @@ const LoginPage = () => {
             </p>
           </div>
 
-          {/* ফর্মের শুরু */}
+        
           <Form onSubmit={onSubmit} className="flex flex-col gap-5 w-full">
             
-            {/* ইমেইল ইনপুট ফিল্ড */}
+            
             <TextField
               isRequired
               name="email"
@@ -135,7 +135,7 @@ const LoginPage = () => {
               </div>
             </TextField>
 
-            {/* পাসওয়ার্ড ইনপুট ফিল্ড */}
+           
             <TextField
               isRequired
               name="password"
@@ -163,14 +163,14 @@ const LoginPage = () => {
               </div>
             </TextField>
 
-            {/* এরর মেসেজ */}
+            
             {serverError && (
               <div className="flex items-center gap-2 text-xs font-medium text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/20 px-3 py-2 rounded-lg border border-rose-200 dark:border-rose-900">
                 <span>⚠️</span> {serverError}
               </div>
             )}
 
-            {/* সাইন ইন সাবমিট বাটন */}
+           
             <Button 
               className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors shadow-sm text-sm focus:outline-none flex justify-center items-center" 
               type="submit"
@@ -179,16 +179,14 @@ const LoginPage = () => {
               {isLoading ? "Logging in..." : "Log in"}
             </Button>
           </Form> 
-          {/* ফরাস ক্লোজিং ট্যাগ ফিক্সড */}
-
-          {/* সেপারেটর প্যানেল */}
+          
           <div className="relative flex py-4 items-center w-full">
             <div className="flex-grow border-t border-slate-100 dark:border-emerald-900"></div>
             <span className="flex-shrink mx-4 text-slate-400 text-xs dark:text-emerald-500/60 uppercase tracking-wider">or continue with</span>
             <div className="flex-grow border-t border-slate-100 dark:border-emerald-900"></div>
           </div>
 
-          {/* গুগল সোশাল লগইন বাটন */}
+         
           <Button
             onClick={handleGoogleSignin}
             className="w-full flex items-center justify-center gap-2 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-emerald-900/30 text-slate-700 dark:text-emerald-200 border border-slate-200 dark:border-emerald-800 font-medium py-2 px-4 rounded-lg text-sm transition-all focus:outline-none shadow-sm"
@@ -196,7 +194,7 @@ const LoginPage = () => {
             <FcGoogle size={20} /> Sign in with Google
           </Button>
 
-          {/* রেজিস্ট্রেশন রিডাইরেক্ট লিঙ্ক */}
+          
           <div className="text-center mt-6">
             <p className="text-sm text-slate-500 dark:text-emerald-400/60">
               Don't have an account?{" "}
