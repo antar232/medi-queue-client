@@ -4,7 +4,7 @@ import { FiSearch, FiCalendar, FiBookOpen } from 'react-icons/fi';
 const MediQueue = () => {
     return (
        
-        <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 my-8">
+        <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 my-10">
             
           
             <div className="w-full bg-[#044e3a] text-white rounded-2xl sm:rounded-3xl px-6 sm:px-12 py-16 text-center relative overflow-hidden shadow-md">

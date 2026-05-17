@@ -10,7 +10,7 @@ import { MdOutlineMedicalServices } from 'react-icons/md';
 const Footer = () => {
     return (
         
-        <div className="w-full px-4 sm:px-6 lg:px-8 mt-4 mb-6">
+        <div className="w-full px-4 sm:px-6 lg:px-8 mt-4 mb-10">
             
            
             <div className="w-full bg-[#1aa274] text-white rounded-t-2xl sm:rounded-t-3xl px-6 sm:px-12 py-10 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">

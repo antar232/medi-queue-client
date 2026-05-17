@@ -6,7 +6,7 @@ import { FiUsers, FiBookOpen, FiCalendar, FiStar } from 'react-icons/fi';
 const HeroSection = () => {
     return (
        
-        <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 my-4">
+        <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 my-10">
             
            
             <div className="w-full bg-[#f4fbf9] dark:bg-slate-900/40 rounded-xl sm:rounded-2xl border border-emerald-100/60 dark:border-slate-800 p-5 sm:p-6 grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-2 items-center shadow-sm">

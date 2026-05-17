@@ -8,7 +8,7 @@ import { IoSearchOutline, IoHelpCircleOutline, IoArrowBack, IoArrowForward } fro
 const HomePage = () => {
     return (
         
-        <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 my-4">
+        <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 my-10">
             
            
             <div className="w-full min-h-[calc(100vh-6rem)] bg-[#044e3a] text-white flex flex-col justify-between relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-lg transition-colors duration-300">
