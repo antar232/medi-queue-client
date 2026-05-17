@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import CustomNavLink from './CustomNavLink';
+// Better-Auth ক্লায়েন্ট ইমপোর্ট করা হলো আসল সেশন ডাটা পাওয়ার জন্য
+import { authClient } from "@/lib/auth-client"; 
 
 const Navbar = () => {
-    // ১. আপনার প্রজেক্টের আসল ইউজার স্টেট (Firebase/Context থেকে আসলে সেটি এখানে বসাবেন)
-    // টেস্ট করার জন্য এখানে null দিয়ে দেখতে পারেন (null মানে লগআউট, অবজেক্ট থাকলে লগইন)
-    const [user, setUser] = useState({
-        displayName: "Rahim Sarkar",
-        email: "rahim@mail.com"
-    }); 
+    // Better-Auth এর রিয়েল-টাইম সেশন হুক
+    const { data: session, isPending } = authClient.useSession();
+    // সেশন থেকে ইউজার অবজেক্ট বের করা হলো (লগইন না থাকলে এটি null হবে)
+    const user = session?.user; 
     
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -19,8 +19,7 @@ const Navbar = () => {
 
     const router = useRouter();
 
-    // ২. ইউজারের নামের প্রথম অক্ষর (Initials) ডাইনামিকালি বের করার ফাংশন
-    // উদাহরণ: "Rahim Sarkar" হলে আসবে "RS", শুধু "Rahim" হলে "R"
+    // ইউজারের নামের প্রথম অক্ষর (Initials) ডাইনামিকালি বের করার ফাংশন
     const getInitials = (name) => {
         if (!name) return "?";
         const names = name.split(" ");
@@ -30,10 +29,16 @@ const Navbar = () => {
         return names[0][0].toUpperCase();
     };
 
-    const handleLogout = () => {
-        setUser(null); // ইউজার ডাটা ক্লিয়ার করে দেওয়া হলো
-        setIsProfileOpen(false);
-        router.push('/');
+    // আসল লগআউট হ্যান্ডলার ফাংশন
+    const handleLogout = async () => {
+        try {
+            await authClient.signOut();
+            setIsProfileOpen(false);
+            setIsMobileMenuOpen(false);
+            router.push('/login'); // লগআউট শেষে লগইন পেইজে রিডাইরেক্ট
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     };
 
     const toggleTheme = () => {
@@ -63,7 +68,7 @@ const Navbar = () => {
                         <CustomNavLink to="/"><span>🏠</span> Home</CustomNavLink>
                         <CustomNavLink to="/tutors">Tutors</CustomNavLink>
                         
-                        {/* কন্ডিশন: ইউজার লগইন (user অবজেক্ট) থাকলে এই লিংকগুলো আসবে */}
+                        {/* কন্ডিশন: আসল ইউজার লগইন থাকলে এই লিংকগুলো আসবে */}
                         {user && (
                             <>
                                 <CustomNavLink to="/add-tutor">Add tutor</CustomNavLink>
@@ -76,6 +81,7 @@ const Navbar = () => {
                     {/* ডান পাশ: থিম টগল এবং ইউজার স্টেট (Desktop) */}
                     <div className="hidden md:flex items-center space-x-4">
                         
+                        {/* ডার্ক মোড বাটন */}
                         <button 
                             onClick={toggleTheme}
                             className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-slate-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-900/40 focus:outline-none"
@@ -87,6 +93,7 @@ const Navbar = () => {
                             )}
                         </button>
 
+                        {/* নোটিফিকেশন আইকন (লগইন থাকলে দেখাবে) */}
                         {user && (
                             <button className="rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-slate-50 dark:border-emerald-800 dark:text-emerald-400 dark:hover:bg-emerald-900/40 relative">
                                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full"></span>
@@ -94,31 +101,43 @@ const Navbar = () => {
                             </button>
                         )}
 
-                        {/* কন্ডিশনাল রেন্ডারিং: ইউজার না থাকলে Login/Register বাটন আসবে */}
-                        {!user ? (
+                        {/* অথেনটিকেশন বাটন কন্ডিশনাল রেন্ডারিং */}
+                        {isPending ? (
+                            <div className="w-9 h-9 rounded-md bg-slate-100 dark:bg-emerald-900/30 animate-pulse"></div>
+                        ) : !user ? (
+                            /* ইউজার লগইন না থাকলে Log in এবং Register বাটন জোড়া আসবে */
                             <div className="flex items-center space-x-2">
-                                <Link href="/login" className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-900/40">
+                                <Link href="/login" className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-900/40 transition-all">
                                     Log in
                                 </Link>
-                                <Link href="/register" className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-emerald-800 dark:text-emerald-300 dark:hover:bg-emerald-900/40">
+                                <Link href="/register" className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 transition-all shadow-sm">
                                     Register
                                 </Link>
                             </div>
                         ) : (
-                            /* ইউজার লগইন থাকলে প্রোফাইল আইকন এবং ড্রপডাউন আসবে */
-                            <div className="relative ml-2">
+                            /* ইউজার লগইন থাকলে তার ডাইনামিক নাম, প্রোফাইল ইমেজ/ইনিশিয়াল ড্রপডাউন আসবে */
+                            <div className="relative flex items-center gap-3 ml-2">
+                                {/* ইউজারের লাইভ নাম পাশে দেখানোর জন্য */}
+                                <span className="text-sm font-semibold text-slate-700 dark:text-emerald-300 hidden lg:inline-block">
+                                    {user?.name}
+                                </span>
+                                
                                 <button
                                     onClick={() => setIsProfileOpen(!isProfileOpen)}
                                     className="flex items-center justify-center w-9 h-9 rounded-md bg-emerald-600 text-white font-bold text-sm tracking-wider focus:outline-none hover:bg-emerald-700 transition-colors"
                                 >
-                                    {getInitials(user?.displayName)}
+                                    {/* ইউজার ইমেজ থাকলে ইমেজ দেখাবে, না থাকলে নামের প্রথম অক্ষর */}
+                                    {user?.image ? (
+                                        <img src={user.image} alt={user.name} className="w-full h-full object-cover rounded-md" />
+                                    ) : (
+                                        getInitials(user?.name)
+                                    )}
                                 </button>
 
                                 {isProfileOpen && (
-                                    <div className="absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-lg bg-white py-1 shadow-xl border border-slate-100 dark:bg-[#022c22] dark:border-emerald-800">
+                                    <div className="absolute right-0 top-10 z-50 mt-2 w-56 origin-top-right rounded-lg bg-white py-1 shadow-xl border border-slate-100 dark:bg-[#022c22] dark:border-emerald-800">
                                         <div className="px-4 py-3 border-b border-slate-100 dark:border-emerald-900">
-                                            {/* এখানে ইউজারের আসল নাম এবং ইমেইল ডাইনামিকালি বসানো হয়েছে */}
-                                            <p className="text-sm font-bold text-slate-800 dark:text-white">{user?.displayName}</p>
+                                            <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{user?.name}</p>
                                             <p className="text-xs text-slate-400 dark:text-emerald-400 truncate mt-0.5">{user?.email}</p>
                                         </div>
                                         <Link href="/profile" className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-emerald-900/40" onClick={() => setIsProfileOpen(false)}>👤 My profile</Link>
@@ -162,11 +181,15 @@ const Navbar = () => {
                             <div className="w-full border-t border-slate-100 dark:border-emerald-900 pt-4 mt-2 flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
                                     <div className="flex items-center justify-center w-9 h-9 rounded-md bg-emerald-600 text-white font-bold text-sm">
-                                        {getInitials(user?.displayName)}
+                                        {user?.image ? (
+                                            <img src={user.image} alt={user.name} className="w-full h-full object-cover rounded-md" />
+                                        ) : (
+                                            getInitials(user?.name)
+                                        )}
                                     </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-slate-800 dark:text-white leading-none">{user?.displayName}</p>
-                                        <p className="text-xs text-slate-400 dark:text-emerald-400 mt-1">{user?.email}</p>
+                                    <div className="max-w-[150px]">
+                                        <p className="text-sm font-bold text-slate-800 dark:text-white leading-none truncate">{user?.name}</p>
+                                        <p className="text-xs text-slate-400 dark:text-emerald-400 mt-1 truncate">{user?.email}</p>
                                     </div>
                                 </div>
                                 <button onClick={handleLogout} className="rounded-md border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600 dark:bg-rose-950/40 dark:border-rose-900 dark:text-rose-400">
@@ -177,7 +200,7 @@ const Navbar = () => {
                     ) : (
                         <div className="flex flex-col gap-2 pt-2">
                             <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center border border-slate-200 rounded-lg py-2 text-sm font-medium text-slate-700 dark:border-emerald-800 dark:text-emerald-300">Log in</Link>
-                            <Link href="/register" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center border border-slate-200 rounded-lg py-2 text-sm font-medium text-slate-700 dark:border-emerald-800 dark:text-emerald-300">Register</Link>
+                            <Link href="/register" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center bg-emerald-600 rounded-lg py-2 text-sm font-medium text-white">Register</Link>
                         </div>
                     )}
                 </div>
