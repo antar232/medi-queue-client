@@ -10,7 +10,7 @@ import { MdOutlineTranslate, MdComputer } from 'react-icons/md';
 import { FiGlobe, FiPlus } from 'react-icons/fi';
 
 const Subjects = () => {
-    // ইমেজের ডেটা অনুযায়ী সাবজেক্ট লিস্ট array
+   
     const subjectData = [
         {
             id: 1,
@@ -24,7 +24,6 @@ const Subjects = () => {
             id: 2,
             title: "Physics",
             count: "96 tutors",
-            // ফিক্সড: কোনো লাইব্রেরির ঝামেলা ছাড়া কাস্টম SVG Atom আইকন
             icon: (
                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="2" fill="currentColor"/>
@@ -78,7 +77,7 @@ const Subjects = () => {
         {
             id: 8,
             title: "More subjects",
-            count: "View all 20+",
+            count: "View all 50+",
             icon: <FiPlus size={24} />,
             iconColor: "text-teal-700 dark:text-teal-400",
             bgColor: "bg-teal-50 dark:bg-teal-950/40",
@@ -89,7 +88,7 @@ const Subjects = () => {
     return (
         <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 my-16">
             
-            {/* সেকশন হেডার এবং ডান পাশের লিঙ্ক */}
+           
             <div className="flex items-end justify-between mb-8">
                 <div className="space-y-1">
                     <p className="text-xs font-semibold tracking-widest text-[#1aa274] dark:text-emerald-400 uppercase">
@@ -109,17 +108,17 @@ const Subjects = () => {
                 </Link>
             </div>
 
-            {/* সাবজেক্ট কার্ডের গ্রিড লেআউট */}
+          
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                 {subjectData.map((subject) => {
                     const CardContent = (
                         <div className="bg-white dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 flex flex-col items-center text-center justify-center gap-4 transition-all duration-300 hover:shadow-md hover:scale-[1.01] cursor-pointer h-full">
-                            {/* গোল আইকন বক্স */}
+                           
                             <div className={`w-12 h-12 rounded-xl ${subject.bgColor} ${subject.iconColor} flex items-center justify-center shadow-sm`}>
                                 {subject.icon}
                             </div>
                             
-                            {/* টেক্সট কন্টেন্ট */}
+                           
                             <div className="space-y-0.5">
                                 <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">
                                     {subject.title}
