@@ -12,12 +12,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'ibb.co.com', // আপনার দেওয়া লিংকের ডোমেইন
+        hostname: 'ibb.co.com', 
         pathname: '/**',
       },
       {
         protocol: 'https',
-        hostname: 'i.ibb.co', // সাধারণত imgbb-এর ডিরেক্ট ইমেজ লিংক এমন হয়
+        hostname: 'i.ibb.co', 
         pathname: '/**',
       },
     ],

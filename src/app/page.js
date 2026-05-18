@@ -3,6 +3,7 @@ import HomePage from "@/components/HomePage";
 import MediQueue from "@/components/MediQueue";
 import Reviews from "@/components/Reviews";
 import Subjects from "@/components/Subjects";
+import Tutor from "@/components/Tutor";
 import Image from "next/image";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
     <div>
       <HomePage/>
       <HeroSection/>
+      <Tutor/>
       <MediQueue/>
       <Subjects/>
       <Reviews/>

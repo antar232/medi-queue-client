@@ -166,7 +166,7 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* মোবাইল ড্রপডাউন প্যানেল */}
+           
             {isMobileMenuOpen && (
                 <div className="md:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-2 dark:border-emerald-900 dark:bg-[#022c22] flex flex-col items-stretch">
                     <CustomNavLink to="/" onClick={() => setIsMobileMenuOpen(false)}>🏠 Home</CustomNavLink>
