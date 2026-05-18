@@ -21,6 +21,7 @@ const LoginPage = () => {
   const [serverError, setServerError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // ইমেইল ও পাসওয়ার্ড দিয়ে সাবমিট হ্যান্ডলার
   const onSubmit = async (e) => {
     e.preventDefault();
     setServerError("");
@@ -49,28 +50,31 @@ const LoginPage = () => {
     }
   };
 
+  // গুগল সাইন-ইন হ্যান্ডলার (ব্র্যাকেট সিনট্যাক্স ফিক্সড)
   const handleGoogleSignin = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-    });
-  };
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/", 
+      });
+    } catch (err) {
+      console.error("Google Sign-in Error:", err);
+    }
+  }; // <--- এখানে ফাংশনটি সঠিকভাবে শেষ হয়েছে
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-slate-50 dark:bg-emerald-950/20 px-4 py-8 transition-colors duration-300">
       
-      
       <div className="flex w-full max-w-4xl bg-white dark:bg-[#022c22] rounded-2xl shadow-xl overflow-hidden border border-slate-100 dark:border-emerald-900 transition-colors duration-300">
         
-       
+        {/* বাম পাশ: ব্যানার */}
         <div className="hidden md:flex md:w-5/12 bg-[#044e3a] p-10 flex-col justify-between text-white relative">
           <div className="space-y-8">
-          
             <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
               <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-600 text-white text-lg">🩺</span>
               <span>MediQueue</span>
             </div>
 
-           
             <div className="space-y-3">
               <h2 className="text-3xl font-bold leading-tight">Welcome back, learner</h2>
               <p className="text-emerald-100/80 text-sm leading-relaxed">
@@ -78,7 +82,6 @@ const LoginPage = () => {
               </p>
             </div>
 
-            
             <div className="space-y-4 pt-4">
               <div className="flex items-center gap-3 text-sm text-emerald-100/90">
                 <span className="p-1.5 rounded-lg bg-emerald-800/60 text-emerald-300">📅</span>
@@ -95,13 +98,12 @@ const LoginPage = () => {
             </div>
           </div>
 
-         
           <div className="text-xs text-emerald-200/50 mt-12">
             © 2026 MediQueue
           </div>
         </div>
 
-        
+        {/* ডান পাশ: ফর্ম */}
         <div className="w-full md:w-7/12 p-8 sm:p-12 flex flex-col justify-center">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Log in</h1>
@@ -110,10 +112,7 @@ const LoginPage = () => {
             </p>
           </div>
 
-        
           <Form onSubmit={onSubmit} className="flex flex-col gap-5 w-full">
-            
-            
             <TextField
               isRequired
               name="email"
@@ -135,7 +134,6 @@ const LoginPage = () => {
               </div>
             </TextField>
 
-           
             <TextField
               isRequired
               name="password"
@@ -163,20 +161,19 @@ const LoginPage = () => {
               </div>
             </TextField>
 
-            
             {serverError && (
               <div className="flex items-center gap-2 text-xs font-medium text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/20 px-3 py-2 rounded-lg border border-rose-200 dark:border-rose-900">
                 <span>⚠️</span> {serverError}
               </div>
             )}
 
-           
             <Button 
               className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors shadow-sm text-sm focus:outline-none flex justify-center items-center" 
               type="submit"
               disabled={isLoading}
+              isLoading={isLoading}
             >
-              {isLoading ? "Logging in..." : "Log in"}
+              Log in
             </Button>
           </Form> 
           
@@ -186,15 +183,13 @@ const LoginPage = () => {
             <div className="flex-grow border-t border-slate-100 dark:border-emerald-900"></div>
           </div>
 
-         
-          <Button
+          <Button type="button"
             onClick={handleGoogleSignin}
             className="w-full flex items-center justify-center gap-2 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-emerald-900/30 text-slate-700 dark:text-emerald-200 border border-slate-200 dark:border-emerald-800 font-medium py-2 px-4 rounded-lg text-sm transition-all focus:outline-none shadow-sm"
           >
             <FcGoogle size={20} /> Sign in with Google
           </Button>
 
-          
           <div className="text-center mt-6">
             <p className="text-sm text-slate-500 dark:text-emerald-400/60">
               Don't have an account?{" "}
@@ -208,6 +203,6 @@ const LoginPage = () => {
       </div>
     </div>
   );
-};
+}; // <--- নিশ্চিত করা হলো LoginPage কম্পোনেন্টটি এখানে সঠিকভাবে শেষ হয়েছে
 
 export default LoginPage;
