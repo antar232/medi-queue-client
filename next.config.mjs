@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  
   reactCompiler: true,
   images: {
     remotePatterns: [
       {
         protocol: 'http',
         hostname: 'localhost',
-        port: '5000', // আপনার এক্সপ্রেস ব্যাকএন্ডের পোর্ট
+        port: '5000', 
         pathname: '/**',
       },
       {
@@ -19,6 +19,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'i.ibb.co', 
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**', 
+      },
+      {
+        protocol: 'http',
+        hostname: '**', 
       },
     ],
   },

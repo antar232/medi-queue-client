@@ -1,27 +1,27 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card, Button, Input, Select, ListBox } from "@heroui/react";
-import { MapPin, Clock, Building2, Search, Calendar } from "lucide-react";
+import { Card, Button, Input } from "@heroui/react";
+import { Search, MapPin } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image"; 
 
-const AllTutors = () => {
+const Page = () => {
   const [tutors, setTutors] = useState([]);
   const [filteredTutors, setFilteredTutors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // সার্চ ও ফিল্টার স্টেটসমূহ
   const [searchQuery, setSearchQuery] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("All Subjects");
 
-  // ব্যাকএন্ড থেকে সব টিউটর ডেটা নিয়ে আসা
   useEffect(() => {
     const fetchTutors = async () => {
       try {
-        // Next.js ক্লায়েন্ট সাইডে এনভায়রনমেন্ট ভেরিয়েবল ব্যবহারের জন্য NEXT_PUBLIC_ ব্যবহার করা ভালো,
-        // অথবা সরাসরি আপনার লোকাল ইউআরএল দিতে পারেন।
-        const res = await fetch("http://localhost:5000/tutor");
+        const serverUrl =
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        const res = await fetch(`${serverUrl}/tutors`);
         const data = await res.json();
         setTutors(data);
         setFilteredTutors(data);
@@ -34,25 +34,21 @@ const AllTutors = () => {
     fetchTutors();
   }, []);
 
-  // ক্লায়েন্ট-সাইড ফিল্টারিং লজিক
   useEffect(() => {
     let updatedList = [...tutors];
 
-    // ১. নাম অনুযায়ী সার্চ ফিল্টার
     if (searchQuery.trim() !== "") {
       updatedList = updatedList.filter((tutor) =>
         tutor.tutorName.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
-    // ২. সাবজেক্ট অনুযায়ী ফিল্টার
     if (selectedSubject !== "All Subjects" && selectedSubject !== "") {
       updatedList = updatedList.filter(
         (tutor) => tutor.subject === selectedSubject,
       );
     }
 
-    // ৩. ডেট রেঞ্জ অনুযায়ী ফিল্টার (Session Start Date এর ওপর ভিত্তি করে)
     if (startDate) {
       updatedList = updatedList.filter(
         (tutor) => new Date(tutor.startDate) >= new Date(startDate),
@@ -67,7 +63,6 @@ const AllTutors = () => {
     setFilteredTutors(updatedList);
   }, [searchQuery, selectedSubject, startDate, endDate, tutors]);
 
-  // টিউটর নামের ইনিশিয়াল জেনারেট করার ফাংশন
   const getInitials = (name) => {
     if (!name) return "TR";
     const parts = name.split(" ");
@@ -77,7 +72,6 @@ const AllTutors = () => {
     return name.slice(0, 2).toUpperCase();
   };
 
-  // টিউটরিং মোড অনুযায়ী কালার থিম নির্ধারণ
   const getBadgeStyles = (mode) => {
     switch (mode?.toLowerCase()) {
       case "online":
@@ -113,14 +107,10 @@ const AllTutors = () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
-      {/* হেডিং */}
       <div>
         <h1 className="text-2xl font-bold text-[#1e6b65]">Find a Tutor</h1>
       </div>
-
-      
       <div className="flex flex-col md:flex-row gap-4 items-center bg-white p-2 rounded-xl shadow-sm border border-slate-100">
-       
         <div className="w-full md:w-1/3 relative flex items-center">
           <Search
             size={18}
@@ -130,7 +120,7 @@ const AllTutors = () => {
             placeholder="Search by tutor name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10" 
+            className="w-full pl-10"
           />
         </div>
 
@@ -181,27 +171,70 @@ const AllTutors = () => {
         </div>
       )}
 
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {!isLoading &&
           filteredTutors.map((tutor) => {
             const styles = getBadgeStyles(tutor.teachingMode);
-
+            
             return (
               <Card
                 key={tutor._id}
-                className="border border-slate-100 shadow-sm rounded-2xl overflow-hidden bg-white hover:shadow-md transition-all"
+                className="border border-slate-100 shadow-sm rounded-2xl overflow-hidden bg-white hover:shadow-md transition-all group"
               >
                 
-                <div
-                  className={`h-32 ${styles.bg} flex items-center justify-center relative`}
-                >
-                  <h2
-                    className={`text-4xl font-black tracking-wider ${styles.text}`}
+                <div className="h-52 w-full bg-slate-50 flex items-center justify-center relative overflow-hidden">
+                  
+                  {tutor.photoUrl ? (
+                    (() => {
+                      let finalSrc = tutor.photoUrl;
+
+                      if (
+                        finalSrc.includes("ibb.co") &&
+                        !finalSrc.match(/\.(jpeg|jpg|gif|png|webp)$/i)
+                      ) {
+                        const urlParts = finalSrc.split("/");
+                        const imageId =
+                          urlParts[urlParts.length - 1] ||
+                          urlParts[urlParts.length - 2];
+
+                        finalSrc = `https://i.ibb.co/${imageId}/image.png`;
+                      }
+
+                      return (
+                        <Image
+                          src={finalSrc}
+                          alt={tutor.tutorName}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover object-top z-10 bg-white group-hover:scale-105 transition-transform duration-300"
+                          priority={false}
+                          unoptimized
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                            const fallbackText = e.currentTarget.nextSibling;
+                            if (fallbackText) fallbackText.style.display = "block";
+                          }}
+                        />
+                      );
+                    })()
+                  ) : null}
+
+                  
+                  <h2 
+                    style={{ display: tutor.photoUrl ? "none" : "block" }}
+                    className={`text-4xl font-black tracking-wider ${styles.text} absolute z-0 select-none`}
                   >
                     {getInitials(tutor.tutorName)}
                   </h2>
+
+                 
+                  <span className={`absolute top-3 right-3 text-[9px] font-bold px-2 py-0.5 rounded-full z-20 ${styles.badgeBg} ${styles.badgeText} shadow-sm`}>
+                    {tutor.teachingMode}
+                  </span>
                 </div>
 
+                
                 <div className="p-5 space-y-3">
                   <div>
                     <h3 className="text-base font-bold text-slate-800">
@@ -212,24 +245,34 @@ const AllTutors = () => {
                     </span>
                   </div>
 
-                 
-                  <div className="text-xs font-semibold text-slate-500">
-                    <span>{tutor.location.split(",")[0]}</span>
-                    <span className="mx-1.5">·</span>
-                    <span>{tutor.teachingMode}</span>
+                  <div className="text-xs font-semibold text-slate-500 flex items-center gap-1">
+                    <MapPin size={12} className="text-slate-400" />
+                    <span>
+                      {tutor.location
+                        ? tutor.location.split(",")[0]
+                        : "Not Specified"}
+                    </span>
                   </div>
 
-                  
-                  <div className="flex items-center justify-between pt-2">
-                    <p className="text-[#1e6b65] font-extrabold text-base">
-                      ৳{tutor.hourlyFee}
-                      <span className="text-[11px] font-medium text-slate-400">
-                        /hr
-                      </span>
-                    </p>
-                    <Button className="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs px-4 py-1.5 rounded-xl transition-all shadow-sm">
-                      Book Session
-                    </Button>
+                 
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-50">
+                    <div>
+                      <p className="text-[#1e6b65] font-extrabold text-base">
+                        ৳{tutor.hourlyFee}
+                        <span className="text-[11px] font-medium text-slate-400"> /hr</span>
+                      </p>
+                      {tutor.totalSlots !== undefined && (
+                        <p className="text-[10px] text-slate-400 font-medium">
+                          {tutor.totalSlots} slots left
+                        </p>
+                      )}
+                    </div>
+
+                    <Link href={`/tutors/${tutor?._id}`}>
+                      <Button className="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs px-4 py-1.5 rounded-xl transition-all shadow-sm">
+                        View Details
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </Card>
@@ -240,4 +283,4 @@ const AllTutors = () => {
   );
 };
 
-export default AllTutors;
+export default Page;
