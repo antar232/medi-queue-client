@@ -1,16 +1,21 @@
+
 import React from "react";
 import { Card, Button } from "@heroui/react";
 import { MapPin, Clock, Building2 } from "lucide-react";
 import Link from "next/link";
+import TutorImage from "./TutorImage"; // 🚀 একই ফোল্ডারে থাকা ক্লায়েন্ট ইমেজ কম্পোনেন্ট
 
-const Tutor = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_UR}/tutors`, {
+const TutorCard = async () => {
+  // API থেকে ডেটা ফেচিং (সার্ভার সাইড)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/tutors`, {
     cache: "no-store",
   });
   const data = await res.json();
 
+  // প্রথম ৩টি টিউটর ফিচারড হিসেবে দেখানো হচ্ছে
   const featuredTutors = data.slice(0, 3);
 
+  // নাম থেকে ইনিশিয়াল (যেমন: Antar Das -> AD) বের করার ফাংশন
   const getInitials = (name) => {
     if (!name) return "TR";
     const parts = name.split(" ");
@@ -20,6 +25,7 @@ const Tutor = async () => {
     return name.slice(0, 2).toUpperCase();
   };
 
+  // টিচিং মোডের ওপর ভিত্তি করে ডাইনামিক কালার স্টাইল
   const getBadgeStyles = (mode) => {
     switch (mode?.toLowerCase()) {
       case "online":
@@ -55,6 +61,7 @@ const Tutor = async () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
+      {/* হেডার সেকশন */}
       <div className="flex justify-between items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-[#1e6b65]">
@@ -64,13 +71,14 @@ const Tutor = async () => {
             Available right now
           </h2>
         </div>
-        <Link href="/tutorsDetails">
+        <Link href="/tutors">
           <button className="text-sm font-semibold text-[#1e6b65] hover:underline flex items-center gap-1">
             View all tutors <span className="text-lg">→</span>
           </button>
         </Link>
       </div>
 
+      {/* টিউটর কার্ড গ্রিড */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {featuredTutors.map((tutor) => {
           const styles = getBadgeStyles(tutor.teachingMode);
@@ -78,23 +86,26 @@ const Tutor = async () => {
           return (
             <Card
               key={tutor._id}
-              className="border border-slate-100 shadow-sm rounded-2xl overflow-hidden bg-white hover:shadow-md transition-shadow"
+              className="border border-slate-100 shadow-sm rounded-2xl overflow-hidden bg-white hover:shadow-md transition-shadow group"
             >
-              <div
-                className={`h-36 ${styles.bg} flex items-center justify-center relative`}
-              >
-                <span
-                  className={`absolute top-3 right-3 text-[10px] font-bold px-2.5 py-0.5 rounded-full ${styles.badgeBg} ${styles.badgeText}`}
-                >
+              {/* 📸 ইমেজ / অ্যাভাটার কন্টেইনার */}
+              <div className={`h-48 w-full ${styles.bg} flex items-center justify-center relative overflow-hidden`}>
+                
+                {/* 🛠️ ক্লায়েন্ট কম্পোনেন্ট: যা ইমেজ লোড এবং ক্র্যাশ হওয়া হ্যান্ডেল করবে */}
+                <TutorImage 
+                  photoUrl={tutor.photoUrl} 
+                  tutorName={tutor.tutorName} 
+                  styles={styles} 
+                  initials={getInitials(tutor.tutorName)} 
+                />
+
+                {/* মোড ব্যাজ (যেমন: Online/Offline) */}
+                <span className={`absolute top-3 right-3 text-[10px] font-bold px-2.5 py-0.5 rounded-full z-20 ${styles.badgeBg} ${styles.badgeText} shadow-sm`}>
                   {tutor.teachingMode}
                 </span>
-                <h2
-                  className={`text-4xl font-black tracking-wider ${styles.text}`}
-                >
-                  {getInitials(tutor.tutorName)}
-                </h2>
               </div>
 
+              {/* টিউটর ইনফরমেশন সেকশন */}
               <div className="p-5 space-y-4">
                 <div>
                   <h3 className="text-lg font-bold text-slate-800">
@@ -105,10 +116,11 @@ const Tutor = async () => {
                   </span>
                 </div>
 
+                {/* ডিটেইলস লিস্ট */}
                 <div className="space-y-2 text-xs font-medium text-slate-500">
                   <div className="flex items-center gap-2">
                     <MapPin size={14} className="text-slate-400" />
-                    <span>{tutor.location}</span>
+                    <span>{tutor.location || "Not Specified"}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock size={14} className="text-slate-400" />
@@ -124,9 +136,10 @@ const Tutor = async () => {
 
                 <hr className="border-slate-100" />
 
+                {/* ফুটার সেকশন: ফি এবং বাটন */}
                 <div className="flex items-center justify-between pt-1">
                   <div>
-                    <p className="text-slate-800 font-bold text-lg">
+                    <p className="text-[#1e6b65] font-extrabold text-lg">
                       ৳{tutor.hourlyFee}
                       <span className="text-xs font-semibold text-slate-400">
                         /hr
@@ -151,4 +164,4 @@ const Tutor = async () => {
   );
 };
 
-export default Tutor;
+export default TutorCard;

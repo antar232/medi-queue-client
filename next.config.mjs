@@ -28,6 +28,18 @@ const nextConfig = {
         protocol: 'http',
         hostname: '**', 
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com', 
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com', 
+      },
+      {
+        protocol: 'https',
+        hostname: '**.amazonaws.com',
+      },
     ],
   },
 };
