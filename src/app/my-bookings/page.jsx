@@ -16,7 +16,7 @@ export default function MyBookingsPage() {
     if (!user?.email) return;
     try {
       const serverUrl =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        process.env.NEXT_PUBLIC_API_URL;
       console.log(
         "Requesting URL:",
         `${serverUrl}/api/bookings?email=${user.email}`,

@@ -15,7 +15,7 @@ const LoginPage = () => {
   const [serverError, setServerError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // ইমেইল ও পাসওয়ার্ড দিয়ে সাবমিট হ্যান্ডলার
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setServerError("");

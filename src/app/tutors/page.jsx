@@ -20,7 +20,7 @@ const Page = () => {
     const fetchTutors = async () => {
       try {
         const serverUrl =
-          process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+          process.env.NEXT_PUBLIC_API_URL;
         const res = await fetch(`${serverUrl}/tutors`);
         const data = await res.json();
         setTutors(data);

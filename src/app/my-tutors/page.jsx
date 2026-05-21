@@ -17,7 +17,7 @@ export default function MyTutorsPage() {
     slots: 0,
   });
 
-  const serverUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  const serverUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchAllTutors = async () => {
     try {
