@@ -6,7 +6,6 @@ import Link from "next/link";
 import TutorImage from "./TutorImage";
 
 const TutorCard = async () => {
-  // API থেকে ডেটা ফেচিং (সার্ভার সাইড)
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/tutors`, {
     cache: "no-store",
   });

@@ -2,13 +2,7 @@
 
 import React, { useState } from "react";
 import { Card, Separator } from "@heroui/react";
-import {
-  Button,
-  Form,
-  Input,
-  Label,
-  TextField,
-} from "@heroui/react";
+import { Button, Form, Input, Label, TextField } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -37,11 +31,13 @@ const LoginPage = () => {
       });
 
       if (data) {
-        router.push('/');
+        router.push("/");
       }
 
       if (error) {
-        setServerError(error.message || "Incorrect password. Please try again.");
+        setServerError(
+          error.message || "Incorrect password. Please try again.",
+        );
       }
     } catch (err) {
       setServerError("Something went wrong. Please check your network.");
@@ -50,33 +46,38 @@ const LoginPage = () => {
     }
   };
 
-  // গুগল সাইন-ইন হ্যান্ডলার (ব্র্যাকেট সিনট্যাক্স ফিক্সড)
+ 
   const handleGoogleSignin = async () => {
     try {
+      setIsLoading(true);
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/", 
+        callbackURL: "/",
       });
     } catch (err) {
       console.error("Google Sign-in Error:", err);
+    } finally {
+      setIsLoading(false);
     }
-  }; // <--- এখানে ফাংশনটি সঠিকভাবে শেষ হয়েছে
+  }; 
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-slate-50 dark:bg-emerald-950/20 px-4 py-8 transition-colors duration-300">
-      
       <div className="flex w-full max-w-4xl bg-white dark:bg-[#022c22] rounded-2xl shadow-xl overflow-hidden border border-slate-100 dark:border-emerald-900 transition-colors duration-300">
-        
         {/* বাম পাশ: ব্যানার */}
         <div className="hidden md:flex md:w-5/12 bg-[#044e3a] p-10 flex-col justify-between text-white relative">
           <div className="space-y-8">
             <div className="flex items-center gap-2 text-xl font-bold tracking-tight">
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-600 text-white text-lg">🩺</span>
+              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-600 text-white text-lg">
+                🩺
+              </span>
               <span>MediQueue</span>
             </div>
 
             <div className="space-y-3">
-              <h2 className="text-3xl font-bold leading-tight">Welcome back, learner</h2>
+              <h2 className="text-3xl font-bold leading-tight">
+                Welcome back, learner
+              </h2>
               <p className="text-emerald-100/80 text-sm leading-relaxed">
                 Log in to access your booked sessions and manage your tutors.
               </p>
@@ -84,15 +85,21 @@ const LoginPage = () => {
 
             <div className="space-y-4 pt-4">
               <div className="flex items-center gap-3 text-sm text-emerald-100/90">
-                <span className="p-1.5 rounded-lg bg-emerald-800/60 text-emerald-300">📅</span>
+                <span className="p-1.5 rounded-lg bg-emerald-800/60 text-emerald-300">
+                  📅
+                </span>
                 <span>View your sessions</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-emerald-100/90">
-                <span className="p-1.5 rounded-lg bg-emerald-800/60 text-emerald-300">🛡️</span>
+                <span className="p-1.5 rounded-lg bg-emerald-800/60 text-emerald-300">
+                  🛡️
+                </span>
                 <span>Secure JWT auth</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-emerald-100/90">
-                <span className="p-1.5 rounded-lg bg-emerald-800/60 text-emerald-300">💻</span>
+                <span className="p-1.5 rounded-lg bg-emerald-800/60 text-emerald-300">
+                  💻
+                </span>
                 <span>Learn from anywhere</span>
               </div>
             </div>
@@ -103,10 +110,12 @@ const LoginPage = () => {
           </div>
         </div>
 
-        {/* ডান পাশ: ফর্ম */}
+        
         <div className="w-full md:w-7/12 p-8 sm:p-12 flex flex-col justify-center">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Log in</h1>
+            <h1 className="text-3xl font-bold text-slate-800 dark:text-white">
+              Log in
+            </h1>
             <p className="text-sm text-slate-500 dark:text-emerald-400/80 mt-2">
               Enter your credentials to continue
             </p>
@@ -125,10 +134,12 @@ const LoginPage = () => {
                 return null;
               }}
             >
-              <Label className="text-xs font-semibold text-slate-700 dark:text-emerald-300">Email address</Label>
+              <Label className="text-xs font-semibold text-slate-700 dark:text-emerald-300">
+                Email address
+              </Label>
               <div className="relative">
-                <Input 
-                  placeholder="name@mail.com" 
+                <Input
+                  placeholder="name@mail.com"
                   className="w-full px-3 py-2 border border-slate-200 dark:border-emerald-800 rounded-lg bg-transparent text-slate-800 dark:text-white focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 text-sm transition-all"
                 />
               </div>
@@ -141,14 +152,19 @@ const LoginPage = () => {
               className="flex flex-col gap-1.5"
             >
               <div className="flex justify-between items-center">
-                <Label className="text-xs font-semibold text-slate-700 dark:text-emerald-300">Password</Label>
-                <Link href="/forgot-password" className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+                <Label className="text-xs font-semibold text-slate-700 dark:text-emerald-300">
+                  Password
+                </Label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
+                >
                   Forgot password?
                 </Link>
               </div>
               <div className="relative">
-                <Input 
-                  placeholder="••••••••" 
+                <Input
+                  placeholder="••••••••"
                   className="w-full pl-3 pr-10 py-2 border border-slate-200 dark:border-emerald-800 rounded-lg bg-transparent text-slate-800 dark:text-white focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-400 text-sm transition-all"
                 />
                 <button
@@ -156,7 +172,11 @@ const LoginPage = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-emerald-500 hover:text-slate-600 dark:hover:text-emerald-300 focus:outline-none"
                 >
-                  {showPassword ? <IoEyeOffOutline size={18} /> : <IoEyeOutline size={18} />}
+                  {showPassword ? (
+                    <IoEyeOffOutline size={18} />
+                  ) : (
+                    <IoEyeOutline size={18} />
+                  )}
                 </button>
               </div>
             </TextField>
@@ -167,23 +187,26 @@ const LoginPage = () => {
               </div>
             )}
 
-            <Button 
-              className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors shadow-sm text-sm focus:outline-none flex justify-center items-center" 
+            <Button
+              className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors shadow-sm text-sm focus:outline-none flex justify-center items-center"
               type="submit"
               disabled={isLoading}
               isLoading={isLoading}
             >
               Log in
             </Button>
-          </Form> 
-          
+          </Form>
+
           <div className="relative flex py-4 items-center w-full">
             <div className="flex-grow border-t border-slate-100 dark:border-emerald-900"></div>
-            <span className="flex-shrink mx-4 text-slate-400 text-xs dark:text-emerald-500/60 uppercase tracking-wider">or continue with</span>
+            <span className="flex-shrink mx-4 text-slate-400 text-xs dark:text-emerald-500/60 uppercase tracking-wider">
+              or continue with
+            </span>
             <div className="flex-grow border-t border-slate-100 dark:border-emerald-900"></div>
           </div>
 
-          <Button type="button"
+          <Button
+            type="button"
             onClick={handleGoogleSignin}
             className="w-full flex items-center justify-center gap-2 bg-white dark:bg-transparent hover:bg-slate-50 dark:hover:bg-emerald-900/30 text-slate-700 dark:text-emerald-200 border border-slate-200 dark:border-emerald-800 font-medium py-2 px-4 rounded-lg text-sm transition-all focus:outline-none shadow-sm"
           >
@@ -193,16 +216,18 @@ const LoginPage = () => {
           <div className="text-center mt-6">
             <p className="text-sm text-slate-500 dark:text-emerald-400/60">
               Don't have an account?{" "}
-              <Link href="/register" className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+              <Link
+                href="/register"
+                className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
+              >
                 Register here
               </Link>
             </p>
           </div>
         </div>
-
       </div>
     </div>
   );
-}; // <--- নিশ্চিত করা হলো LoginPage কম্পোনেন্টটি এখানে সঠিকভাবে শেষ হয়েছে
+};
 
 export default LoginPage;

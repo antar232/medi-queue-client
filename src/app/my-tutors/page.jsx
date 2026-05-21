@@ -72,7 +72,6 @@ export default function MyTutorsPage() {
     try {
       const { _id, slots, ...dataToSend } = editData;
 
-      // এখানে 'slots' এর নাম বদলে 'totalSlots' করে দিন যাতে ডাটাবেজের সাথে মিলে যায়
       const updatedData = { ...dataToSend, totalSlots: slots };
 
       console.log("Request URL:", `${serverUrl}/tutors/${_id}`);

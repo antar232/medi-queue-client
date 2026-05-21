@@ -25,7 +25,7 @@ export default function MyBookingsPage() {
       const res = await axios.get(
         `${serverUrl}/api/bookings?email=${user.email}`,
       );
-      console.log("Raw Response Data:", res.data); // দেখুন এখানে [] আসছে নাকি ডাটা আসছে
+      console.log("Raw Response Data:", res.data); 
 
       setBookings(res.data);
     } catch (err) {
